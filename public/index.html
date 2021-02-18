@@ -28,16 +28,16 @@
   </head>
   <body>
     <noscript>You need to enable JavaScript to run this app.</noscript>
-    <div id="root"></div>
-    <!--
-      This HTML file is a template.
-      If you open it directly in the browser, you will see an empty page.
-
-      You can add webfonts, meta tags, or analytics to this file.
-      The build step will place the bundled scripts into the <body> tag.
-
-      To begin the development, run `npm start` or `yarn start`.
-      To create a production bundle, use `npm run build` or `yarn build`.
-    -->
+    <my-custom-element title="react component as custom element" learning="this is fun" id="customElement">
+      <div>This is some content</div>
+    </my-custom-element>
+    <button id="titleChange" >change the title</button>
+    <script>
+      var table = document.querySelector('my-custom-element');
+      table.data = [10, 20, 30]
+      document.getElementById('titleChange').addEventListener('click',()=>{
+        table.title = "This is amazing thing!"
+      })
+    </script>
   </body>
 </html>

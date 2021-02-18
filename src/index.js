@@ -1,17 +1,64 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import './index.css';
 import App from './App';
-import reportWebVitals from './reportWebVitals';
 
-ReactDOM.render(
-  <React.StrictMode>
-    <App />
-  </React.StrictMode>,
-  document.getElementById('root')
-);
+class MyCustomElement extends HTMLElement {
 
-// If you want to start measuring performance in your app, pass a function
-// to log results (for example: reportWebVitals(console.log))
-// or send to an analytics endpoint. Learn more: https://bit.ly/CRA-vitals
-reportWebVitals();
+  static get observedAttributes() {
+    return ['title'];
+  }
+
+  constructor(){
+    super();
+    this._data = []
+  }
+
+
+  connectedCallback(){
+    this.attachShadow({mode:'open'})
+    this.render()
+  }
+
+  render(){
+    if (this.shadowRoot){
+      const props = {
+        data: this._data
+      }
+      for(let i = 0 ; i < this.attributes.length ; i++){
+        props[this.attributes[i].name] = this.attributes[i].value
+      }
+
+      ReactDOM.render(<App {...props} />,this.shadowRoot)
+    }
+  }
+
+  get data(){
+    return this._data;
+  }
+
+  set data(val){
+    this._data= val;
+    console.log(this._data)
+  }
+
+  get title(){
+    return this.getAttribute('title');
+  }
+
+  set title(value){
+    this.setAttribute('title',value)
+  }
+
+  attributeChangedCallback(){
+    this.render()
+  }
+
+  disconnectedCallback(){
+    ReactDOM.unmountComponentAtNode(this)
+  }
+
+}
+
+window.customElements.define('my-custom-element',MyCustomElement)
+
+
